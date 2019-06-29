@@ -222,6 +222,7 @@ namespace BookProjectTest.Controllers
         {
             if (!_countryRepository.CountryExist(countryId))
                 return NotFound();
+
             var countryToDelete = _countryRepository.GetCountry(countryId);
 
             if (_countryRepository.GetAuthorsFromACountry(countryId).Count() > 0)

@@ -126,7 +126,6 @@ namespace BookProjectTest.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-       
         [ProducesResponseType(422)]
         [ProducesResponseType(500)]
         public IActionResult CreateAuthor([FromBody]Author authorToCreate)
@@ -151,6 +150,32 @@ namespace BookProjectTest.Controllers
             }
 
             return CreatedAtRoute("GetAuthor", new { authorId = authorToCreate.Id }, authorToCreate);
+        }
+
+
+        //update author
+        [HttpPut("{authorId}")]
+        public IActionResult UpdateAuthor(int authorId, [FromBody]Author authorUpdateInfo)
+        {
+            if (authorUpdateInfo == null)
+                return BadRequest(ModelState);
+
+            if (authorId != authorUpdateInfo.Id)
+                return BadRequest(ModelState);
+
+            if (!_authorRepository.AuthorExists(authorId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (!_authorRepository.UpdateAuthor(authorUpdateInfo))
+            {
+                ModelState.AddModelError("", $"SOmething went wrong updating {authorUpdateInfo}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+
         }
     }
 }
