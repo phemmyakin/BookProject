@@ -1,0 +1,14 @@
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\bin\Debug\netcoreapp2.2\BookProjectTest.deps.json
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\bin\Debug\netcoreapp2.2\BookProjectTest.runtimeconfig.json
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\bin\Debug\netcoreapp2.2\BookProjectTest.runtimeconfig.dev.json
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\bin\Debug\netcoreapp2.2\BookProjectTest.dll
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\bin\Debug\netcoreapp2.2\BookProjectTest.pdb
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.csproj.CoreCompileInputs.cache
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.RazorAssemblyInfo.cache
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.RazorAssemblyInfo.cs
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.AssemblyInfoInputs.cache
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.AssemblyInfo.cs
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.RazorTargetAssemblyInfo.cache
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.dll
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.pdb
+C:\Users\Vatebra-EDMS-WAEC\source\repos\BookProjectTest\BookProjectTest\obj\Debug\netcoreapp2.2\BookProjectTest.csprojAssemblyReference.cache
