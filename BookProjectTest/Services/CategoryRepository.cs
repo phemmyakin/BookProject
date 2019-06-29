@@ -44,5 +44,30 @@ namespace BookProjectTest.Services
             var category = _categoryContext.Categories.Where(c => c.Name.Trim().ToUpper() == categoryName.Trim().ToUpper() && c.Id != categoryId).FirstOrDefault();
             return category == null ? false : true;
         }
+
+        public bool CreateCategory(Category category)
+        {
+            _categoryContext.Categories.Add(category);
+            return Save();
+        }
+
+        public bool UpdateCategory(Category category)
+        {
+            _categoryContext.Categories.Update(category);
+            return Save();
+        }
+
+        public bool DeleteCategory(Category category)
+        {
+            _categoryContext.Categories.Remove(category);
+            return Save();
+
+        }
+
+        public bool Save()
+        {
+            var saved = _categoryContext.SaveChanges();
+            return saved >=0 ? true : false;
+        }
     }
 }

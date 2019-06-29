@@ -1,4 +1,5 @@
 ﻿using BookProjectTest.Dtos;
+using BookProjectTest.Models;
 using BookProjectTest.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -48,7 +49,7 @@ namespace BookProjectTest.Controllers
 
         //api/categories/categoryid
 
-        [HttpGet("{categoryId}")]
+        [HttpGet("{categoryId}", Name ="GetCategory")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -136,8 +137,35 @@ namespace BookProjectTest.Controllers
             }
 
             return Ok(bookDto);
+        }
 
+        //create category method
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+       
+        [ProducesResponseType(422)]
+        [ProducesResponseType(500)]
+        public IActionResult CreateCategory([FromBody]Category categoryToCreate)
+        {
+            if (categoryToCreate == null)
+                return BadRequest(ModelState);
 
+            var category = _categoryRepository.GetCategories().
+                Where(c => c.Name.Trim().ToLower() == categoryToCreate.Name.Trim().ToLower()).FirstOrDefault();
+            if(category != null)
+            {
+                ModelState.AddModelError("", $"Category {categoryToCreate.Name} already exist");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (!_categoryRepository.CreateCategory(categoryToCreate))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving {categoryToCreate.Name}");
+                return StatusCode(500, ModelState);
+            }
+            return CreatedAtRoute("GetCategory", new { categoryId = categoryToCreate.Id},categoryToCreate);
         }
 
     }

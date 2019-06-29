@@ -166,7 +166,7 @@ namespace BookProjectTest.Controllers
                 ModelState.AddModelError("", $"something went wrong saving {countryToCreate.Name}");
                 return StatusCode(500, ModelState);
             }
-            return CreatedAtRoute("GetCountry", new { countryId = countryToCreate.Id }, countryToCreate);
+            return CreatedAtRoute("GetCountry",new { countryId = countryToCreate.Id } ,countryToCreate);
 
         }
 
@@ -190,6 +190,7 @@ namespace BookProjectTest.Controllers
 
             if (!_countryRepository.CountryExist(countryId))
                 return NotFound();
+
             if (_countryRepository.IsDuplicateCountryName(countryId, UpdatedcountryInfo.Name))
             {
                 ModelState.AddModelError("", $"Country {UpdatedcountryInfo.Name} already exist");
@@ -207,7 +208,7 @@ namespace BookProjectTest.Controllers
 
             return NoContent();
         }
-
+        
 
         //delete country
         [HttpDelete("{countryId}")]
@@ -232,6 +233,7 @@ namespace BookProjectTest.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             if (!_countryRepository.DeleteCountry(countryToDelete))
             {
                 ModelState.AddModelError("", $"Something went wrong deleteing {countryToDelete.Name}");

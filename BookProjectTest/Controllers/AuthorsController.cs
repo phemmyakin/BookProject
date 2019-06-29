@@ -1,4 +1,5 @@
 ﻿using BookProjectTest.Dtos;
+using BookProjectTest.Models;
 using BookProjectTest.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,7 +46,7 @@ namespace BookProjectTest.Controllers
         }
 
         //api/authors/authorid
-        [HttpGet("{authorId}")]
+        [HttpGet("{authorId}", Name ="GetAuthor")]
         [ProducesResponseType(200, Type =typeof(AuthorDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -119,6 +120,37 @@ namespace BookProjectTest.Controllers
 
             }
             return Ok(bookDto);
+        }
+
+        //create Author
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+       
+        [ProducesResponseType(422)]
+        [ProducesResponseType(500)]
+        public IActionResult CreateAuthor([FromBody]Author authorToCreate)
+        {
+            if (authorToCreate == null)
+                return BadRequest(ModelState);
+
+            var author = _authorRepository.GetAuthors().
+                Where(a => a.FirstName == authorToCreate.FirstName && a.LastName == authorToCreate.LastName).FirstOrDefault();
+            if(author != null)
+            {
+                ModelState.AddModelError("", $"Author {authorToCreate.LastName} , {authorToCreate.LastName} already exist");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (!_authorRepository.CreateAuthor(author))
+            {
+                ModelState.AddModelError("", $"Something went wrong creating {authorToCreate.LastName} , {authorToCreate.LastName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return CreatedAtRoute("GetAuthor", new { authorId = authorToCreate.Id }, authorToCreate);
         }
     }
 }
