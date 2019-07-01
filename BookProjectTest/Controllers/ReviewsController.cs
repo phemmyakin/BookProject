@@ -1,4 +1,5 @@
 ﻿using BookProjectTest.Dtos;
+using BookProjectTest.Models;
 using BookProjectTest.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -47,7 +48,7 @@ namespace BookProjectTest.Controllers
         }
 
         //api/reviews/reviewId
-        [HttpGet("{reviewId}")]
+        [HttpGet("{reviewId}", Name = "GetReview")]
         [ProducesResponseType(200, Type = typeof(ReviewDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -116,6 +117,61 @@ namespace BookProjectTest.Controllers
                 });
             }
             return Ok(reviewDto);
+        }
+
+        //route==api/review
+        //create review
+        [HttpPost]
+        public IActionResult CreateReview([FromBody]Review reviewToCreate)
+        {
+            if (reviewToCreate == null)
+                return BadRequest(ModelState);
+            var review = _reviewRepository.GetReviews().
+                Where(r => r.HeadLine.Trim().ToLower() == reviewToCreate.HeadLine.Trim().ToLower()
+                || r.ReviewText.Trim().ToLower() == reviewToCreate.ReviewText.Trim().ToLower()).FirstOrDefault();
+
+            if(review != null)
+            {
+                ModelState.AddModelError("", $"Headline or review text already exist ");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.CreateReview(reviewToCreate))
+            {
+                ModelState.AddModelError("", $"Soemthing Went wrong creating this review");
+                return StatusCode(500, ModelState);
+            }
+
+            return CreatedAtRoute("GetReview", new { reviewId = reviewToCreate.Id }, reviewToCreate);
+
+        }
+
+
+        //update review
+        [HttpPut]
+        public IActionResult UpdateReview(int reviewId, [FromBody]Review updateReviewInfo)
+        {
+            if (updateReviewInfo == null)
+                return BadRequest(ModelState);
+
+            if (reviewId != updateReviewInfo.Id)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.UpdateReview(updateReviewInfo))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating");
+                return StatusCode(500, ModelState);
+            }
+            return NoContent();
         }
 
 

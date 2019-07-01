@@ -208,6 +208,11 @@ namespace BookProjectTest.Controllers
 
         //delete method Api
         [HttpDelete("{categoryId}")]
+        [ProducesResponseType(204)] //no content
+        [ProducesResponseType(400)]  //badrequest
+        [ProducesResponseType(404)]  //not found
+        [ProducesResponseType(409)]   //conflict
+        [ProducesResponseType(500)] 
         public IActionResult DeleteCategory(int categoryId)
         {
             if (!_categoryRepository.CategoryExist(categoryId))
