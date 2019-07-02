@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookProjectTest.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class ReviewsController : Controller
@@ -95,7 +95,7 @@ namespace BookProjectTest.Controllers
         //GetReviewsOfABook
         //api/reviews/bookId/review
         [HttpGet("{bookId}/review")]
-        [ProducesResponseType(200, Type = typeof (IEnumerable<ReviewDto>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ReviewDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetReviewsOfABook(int bookId)
@@ -103,7 +103,7 @@ namespace BookProjectTest.Controllers
             if (!_bookRepository.BookExists(bookId))
                 return NotFound();
             var reviews = _reviewRepository.GetReviewsOfABook(bookId);
-                if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var reviewDto = new List<ReviewDto>();
             foreach (var review in reviews)
@@ -130,7 +130,7 @@ namespace BookProjectTest.Controllers
                 Where(r => r.HeadLine.Trim().ToLower() == reviewToCreate.HeadLine.Trim().ToLower()
                 || r.ReviewText.Trim().ToLower() == reviewToCreate.ReviewText.Trim().ToLower()).FirstOrDefault();
 
-            if(review != null)
+            if (review != null)
             {
                 ModelState.AddModelError("", $"Headline or review text already exist ");
                 return StatusCode(422, ModelState);
@@ -170,6 +170,26 @@ namespace BookProjectTest.Controllers
             {
                 ModelState.AddModelError("", $"Something went wrong updating");
                 return StatusCode(500, ModelState);
+            }
+            return NoContent();
+        }
+
+
+        //delete review
+        [HttpDelete("{reviewId}")]
+        public IActionResult DeleteReview(int reviewId, int bookId)
+        {
+            if (!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            var reviewToDelete = _reviewRepository.GetReview(reviewId);
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (!_reviewRepository.DeleteReview(reviewToDelete))
+            {
+                ModelState.AddModelError("", $"Something went wrong Deleting review");
             }
             return NoContent();
         }

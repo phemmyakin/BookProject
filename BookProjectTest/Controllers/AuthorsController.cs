@@ -134,7 +134,8 @@ namespace BookProjectTest.Controllers
                 return BadRequest(ModelState);
 
             var author = _authorRepository.GetAuthors().
-                Where(a => a.FirstName == authorToCreate.FirstName && a.LastName == authorToCreate.LastName).FirstOrDefault();
+                Where(a => a.FirstName.Trim().ToLower() == authorToCreate.FirstName.Trim().ToLower() 
+                && a.LastName.Trim().ToLower() == authorToCreate.LastName.Trim().ToLower()).FirstOrDefault();
             if(author != null)
             {
                 ModelState.AddModelError("", $"Author {authorToCreate.LastName} , {authorToCreate.LastName} already exist");
@@ -143,7 +144,7 @@ namespace BookProjectTest.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if (!_authorRepository.CreateAuthor(author))
+            if (!_authorRepository.CreateAuthor(authorToCreate))
             {
                 ModelState.AddModelError("", $"Something went wrong creating {authorToCreate.LastName} , {authorToCreate.LastName}");
                 return StatusCode(500, ModelState);
@@ -170,12 +171,36 @@ namespace BookProjectTest.Controllers
                 return BadRequest(ModelState);
             if (!_authorRepository.UpdateAuthor(authorUpdateInfo))
             {
-                ModelState.AddModelError("", $"SOmething went wrong updating {authorUpdateInfo}");
+                ModelState.AddModelError("", $"Something went wrong updating {authorUpdateInfo}");
                 return StatusCode(500, ModelState);
             }
 
             return NoContent();
+        }
 
+
+        //Delete Author APi Method
+        [HttpDelete]
+        public IActionResult DeleteAuthor(int authorId)
+        {
+            if (!_authorRepository.AuthorExists(authorId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var authorToDelete = _authorRepository.GetAuthor(authorId);
+            if(_authorRepository.GetBooksByAuthor(authorId).Count() > 0)
+            {
+                ModelState.AddModelError("", $"Author cannot be deleted because it has at least one book");
+                return StatusCode(422, ModelState);
+            }
+            if (!_authorRepository.DeleteAuthor(authorToDelete))
+            {
+                ModelState.AddModelError("", $"Somethiing went wrong deleting {authorToDelete.FirstName}");
+                return StatusCode(500, ModelState);
+            }
+            return NoContent();
         }
     }
 }
