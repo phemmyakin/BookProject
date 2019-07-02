@@ -180,7 +180,7 @@ namespace BookProjectTest.Controllers
 
 
         //Delete Author APi Method
-        [HttpDelete]
+        [HttpDelete("{authorId}")]
         public IActionResult DeleteAuthor(int authorId)
         {
             if (!_authorRepository.AuthorExists(authorId))
